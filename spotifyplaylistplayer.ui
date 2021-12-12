@@ -13,6 +13,19 @@
   <property name="windowTitle">
    <string>SpotifyPlayListPlayer</string>
   </property>
+  <widget class="QPushButton" name="pushButtonGrant">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>240</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Go!</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

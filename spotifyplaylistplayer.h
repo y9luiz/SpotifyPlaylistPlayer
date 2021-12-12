@@ -2,6 +2,8 @@
 #define SPOTIFYPLAYLISTPLAYER_H
 
 #include <QWidget>
+#include <memory>
+#include "spotifywrapper.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SpotifyPlayListPlayer; }
@@ -15,7 +17,11 @@ public:
     SpotifyPlayListPlayer(QWidget *parent = nullptr);
     ~SpotifyPlayListPlayer();
 
+private slots:
+    void on_pushButtonGrant_clicked();
+
 private:
+    SpotifyWrapper spotifyWrapper;
     Ui::SpotifyPlayListPlayer *ui;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H
