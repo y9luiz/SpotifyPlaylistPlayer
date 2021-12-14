@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
         spotifyplaylistplayer.ui
         spotifywrapper.h
         spotifywrapper.cpp
+        utils.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
