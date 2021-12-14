@@ -20,6 +20,8 @@ public:
 private slots:
     void on_pushButtonGrant_clicked();
 
+    void on_lineEditTrack_returnPressed();
+
 private:
     SpotifyWrapper spotifyWrapper;
     Ui::SpotifyPlayListPlayer *ui;

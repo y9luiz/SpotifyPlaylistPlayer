@@ -6,6 +6,7 @@ SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     , ui(new Ui::SpotifyPlayListPlayer)
 {
     ui->setupUi(this);
+    ui->lineEditTrack->setEnabled(false);
 }
 
 SpotifyPlayListPlayer::~SpotifyPlayListPlayer()
@@ -13,23 +14,19 @@ SpotifyPlayListPlayer::~SpotifyPlayListPlayer()
     delete ui;
 }
 
-
 void SpotifyPlayListPlayer::on_pushButtonGrant_clicked()
 {
     spotifyWrapper.grant();
-    QObject::connect(&spotifyWrapper, &SpotifyWrapper::authenticated, [this](){
-           qDebug() << "authenticated";
-           QNetworkReply *reply = spotifyWrapper.me();
-           QObject::connect(reply, &QNetworkReply::finished, [=]() {
-                   reply->deleteLater();
-                   if (reply->error() != QNetworkReply::NoError) {
-                       qDebug()<<"temos um erro";
-                       qDebug() << reply->errorString();
-                       return;
-                   }
-                   QTimer::singleShot(1000, &QCoreApplication::quit);
-           });
-       });
 
+    QObject::connect(&spotifyWrapper, &SpotifyWrapper::userIdReplied, [this](){
+           ui->lineEditTrack->setEnabled(true);
+           ui->labelUserId->setText("<b>User ID:</b>" + spotifyWrapper.getUserId());
+    });
+
+}
+void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
+{
+    qDebug() <<"[SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()][INFO] Searching for playlist";
+    spotifyWrapper.searchTrack(ui->lineEditTrack->text(),10);
 }
 
