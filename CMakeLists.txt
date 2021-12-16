@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Gui Network NetworkAuth REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Gui Network NetworkAuth Multimedia REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
         spotifywrapper.h
         spotifywrapper.cpp
         utils.h
+        DataAccessObjects/dataaccessobject.h
+        DataAccessObjects/SpotifyUser/spotifyuser.h
+        DataAccessObjects/SpotifyTrack/spotifytrack.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -47,7 +50,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(SpotifyPlaylistPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::NetworkAuth)
+target_link_libraries(SpotifyPlaylistPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::NetworkAuth  Qt${QT_VERSION_MAJOR}::Multimedia)
 
 set_target_properties(SpotifyPlaylistPlayer PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
