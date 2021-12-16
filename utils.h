@@ -11,7 +11,7 @@ namespace Constants
         const QString responseType = "code";
         const QString clientId = "20087250e7fb4414a94189aea4f714a4";
         const QString clientSecret = "207ce7f1040b44d39ae7d45494a8655d";
-        const QString scope = "user-top-read";
+        const QString scope = "user-top-read user-read-private user-read-email";
         constexpr uint16_t port = 8080;
         const QString redirectUri = "http://localhost:" + QString::number(port) + "/cb/";
         const QString grantType = "authorization_code";
