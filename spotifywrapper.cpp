@@ -90,9 +90,9 @@ void SpotifyWrapper::grant()
 void SpotifyWrapper::granted()
 {
     // when granted, request the user id from the spotify server
-    requestUserId();
+    requestUser();
 }
-void SpotifyWrapper::requestUserId()
+void SpotifyWrapper::requestUser()
 {
 
     QNetworkReply *reply = me();
@@ -102,17 +102,20 @@ void SpotifyWrapper::requestUserId()
                         reply->deleteLater();
 
                         if (reply->error() != QNetworkReply::NoError) {
-                            qDebug() << "[SpotifyWrapper::requestUserId()][QNetworkReply::finished][ERROR] " << reply->errorString();
+                            qDebug() << "[SpotifyWrapper::requestUser()][QNetworkReply::finished][ERROR] " << reply->errorString();
                             return;
                         }
 
                         const auto data = reply->readAll();
-
                         const auto document = QJsonDocument::fromJson(data);
                         const auto root = document.object();
-                        userId = root.value("id").toString();
+
+
+                        qDebug() << root <<"\n";
+                        SpotifyUser user(root.value("display_name").toString(),root.value("email").toString(), root.value("id").toString()) ;
+
                         // after receive the user id emit a signal to notify the application
-                        emit userIdReplied();
+                        emit userReplied(user);
                     }
                );
 }
@@ -121,7 +124,7 @@ QNetworkReply  * SpotifyWrapper::me()
 {
     return oauth2->get(QUrl("https://api.spotify.com/v1/me"));
 }
-QString SpotifyWrapper::searchTrack(QString  phrase, uint8_t limit)
+void SpotifyWrapper::requestSearchTrack(QString  phrase, uint8_t limit)
 {
 
     QString query = "https://api.spotify.com/v1/search?q=" + phrase + "&type=track" + "&limit=" + QString::number(limit);
@@ -136,27 +139,40 @@ QString SpotifyWrapper::searchTrack(QString  phrase, uint8_t limit)
                             return;
                         }
 
+                        // as specified at documentation,
+                        // each search returns a reply that contains
+                        // an array with the desired objects called by
+                        // \"items\"
                         const auto data = reply->readAll();
                         const auto document = QJsonDocument::fromJson(data);
                         const auto root = document.object();
                         const auto tracks = root["tracks"].toObject();
-                        const auto jsonArray = tracks["items"].toArray();
+                        const auto jsonItemsArray = tracks["items"].toArray();
 
-                        foreach (const QJsonValue & value, jsonArray) {
+                        // Our object answer
+                        QList<SpotifyTrack> tracksList;
+
+                        foreach (const QJsonValue & item, jsonItemsArray) {
                             QString music;
-                            const auto item = value.toObject();
-                            music = item.value("name").toString() + " - ";
+                            const auto track = item.toObject();
+                            // create our DAO to communicate with the UI
+                            SpotifyTrack spotifyTrack;
+                            spotifyTrack.id_ = track.value("id").toString();
+                            spotifyTrack.name_ = track.value("name").toString();
+                            spotifyTrack.url_ = track.value("preview_url").toString();
+                            const auto jsonArrayArtists = track.value("artists").toArray();
 
-                            const auto jsonArrayArtists = item.value("artists").toArray();
                             foreach (const QJsonValue & value, jsonArrayArtists){
                                 const auto artists = value.toObject();
-                                music += artists.value("name").toString() + " ";
+                                spotifyTrack.artists_ += artists.value("name").toString() + " ";
                             }
-                            qDebug() << music;
-                            music.clear();
-                            }
+
+                            tracksList.push_back(spotifyTrack);
+
+                        }
+                        // return out list of tracks to UI
+                        emit trackReplied(tracksList);
                     }
                 );
-    return "";
 }
 

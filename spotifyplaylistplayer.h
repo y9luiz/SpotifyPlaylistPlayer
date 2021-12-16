@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <memory>
+#include <QMediaPlayer>
 #include "spotifywrapper.h"
 
 QT_BEGIN_NAMESPACE
@@ -22,8 +23,14 @@ private slots:
 
     void on_lineEditTrack_returnPressed();
 
+    void on_pushButton_clicked();
+
+    void on_tableWidgetTracks_cellClicked(int row, int column);
+
 private:
     SpotifyWrapper spotifyWrapper;
     Ui::SpotifyPlayListPlayer *ui;
+    std::shared_ptr<QMediaPlayer> player_;
+    std::shared_ptr<QAudioOutput> audioOutput_;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H

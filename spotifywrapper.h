@@ -8,32 +8,27 @@
 #include <QString>
 #include <memory>
 #include <QtNetworkAuth>
-
-
+#include <DataAccessObjects/dataaccessobject.h>
 
 class SpotifyWrapper : public QObject
 {
     Q_OBJECT
 public:
     explicit SpotifyWrapper(QObject *parent = nullptr);
-    QNetworkReply  * me();
-    QString inline getUserId(){return userId;};
-    QString searchTrack(QString  phrase,  uint8_t limit);
-
+    void requestUser();
+    void requestSearchTrack(QString  phrase, uint8_t limit);
 signals:
     void authenticated();
-    void userIdReplied();
+    void userReplied(SpotifyUser user);
+    void trackReplied(QList<SpotifyTrack> tracks);
 public slots:
     void grant();
     void granted();
-private:
 
-    void requestUserId();
+private:
+    QNetworkReply  * me();
     std::shared_ptr<QOAuth2AuthorizationCodeFlow> oauth2;
     QOAuthHttpServerReplyHandler *replyHandler = nullptr;
-
-    QString userId;
-
     QString state;
     QString code;
 
