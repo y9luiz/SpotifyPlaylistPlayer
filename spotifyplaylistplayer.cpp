@@ -8,7 +8,9 @@ SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     , ui(new Ui::SpotifyPlayListPlayer)
 {
     player_ = std::make_shared<QMediaPlayer>(this);
-    audioOutput_ = std::make_shared<QAudioOutput>();
+    #if IS_QT6
+        audioOutput_ = std::make_shared<QAudioOutput>();
+    #endif
     ui->setupUi(this);
     ui->lineEditTrack->setEnabled(false);
     ui->tableWidgetTracks->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -36,8 +38,9 @@ void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
     QString phrase = ui->lineEditTrack->text();
     spotifyWrapper.requestSearchTrack(phrase,10);
     ui->tableWidgetTracks->setRowCount(10);
-    player_->setAudioOutput(audioOutput_.get());
-
+    #if IS_QT6
+        player_->setAudioOutput(audioOutput_.get());
+    #endif
     QObject::connect(&spotifyWrapper, &SpotifyWrapper::trackReplied,
                      [this](QList<SpotifyTrack> tracksList){
                         uint8_t idx = 0;
@@ -47,7 +50,6 @@ void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
                             ui->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.name()));
                             ui->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.artists()));
                             idx++;
-                            qDebug()<< track.url() <<" " <<track.id() << " " <<track.name() <<" " << track.artists();
                         }
                      }
             );
@@ -56,33 +58,35 @@ void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
 
 void SpotifyPlayListPlayer::on_pushButton_clicked()
 {
-
     auto items = ui->tableWidgetTracks->selectedItems();
 
     if(!items.empty())
     {
-        player_->setSource(QUrl(items.front()->text()));
-        audioOutput_->setVolume(50);
+        // get the first element of the ItemWidgetList
+        // which correspond to the track preview url
+        QString trackPreviewUrl = items.front()->text();
+        qDebug() << "[SpotifyPlayListPlayer::on_pushButton_clicked()][INFO] starting playing music";
+        player_->setSource(QUrl(trackPreviewUrl));
+        #if IS_QT6
+            audioOutput_->setVolume(50);
+        #else
+            player_->setVolume(50);
+        #endif
         player_->play();
     }
 
 }
-
-
-void SpotifyPlayListPlayer::on_tableWidgetTracks_cellClicked(int row, int column)
-{
-
-}
-
 
 void SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()
 {
     // once clicked to create a new playlist, get the playlist name from user input
     bool ok;
 
-    QString text = QInputDialog::getText(this, tr("New Play List"),
+    QString playListName = QInputDialog::getText(this, tr("New Play List"),
                                            tr("Insert the Playlist name"), QLineEdit::Normal,
                                             tr(""), &ok);
+    localPlaylists_.push_back(LocalPlaylist(playListName));
+    qDebug() << "[SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()][INFO] Empty playlist with name " << playListName << " created";
 
 }
 
