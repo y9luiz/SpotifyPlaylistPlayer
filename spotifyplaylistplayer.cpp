@@ -3,6 +3,7 @@
 #include "DataAccessObjects/dataaccessobject.h"
 #include <QAudioOutput>
 #include <QInputDialog>
+#include "utils.h"
 SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     : QWidget(parent), spotifyWrapper(this)
     , ui(new Ui::SpotifyPlayListPlayer)
@@ -39,21 +40,14 @@ void SpotifyPlayListPlayer::on_pushButtonGrant_clicked()
 void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
 {
     QString phrase = ui->lineEditTrack->text();
-    spotifyWrapper.requestSearchTrack(phrase,10);
-    ui->tableWidgetTracks->setRowCount(10);
+    spotifyWrapper.requestSearchTrack(phrase, Constants::SpotifyPlaylistPlayer::PlaylistSize );
     #if IS_QT6
         player_->setAudioOutput(audioOutput_.get());
     #endif
     QObject::connect(&spotifyWrapper, &SpotifyWrapper::trackReplied,
-                     [this](QList<SpotifyTrack> tracksList){
+                     [this](QList<SpotifyTrack> trackList){
                         uint8_t idx = 0;
-                        foreach(const auto & track,tracksList)
-                        {
-                            ui->tableWidgetTracks->setItem(idx,0,new QTableWidgetItem(track.url()));
-                            ui->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.name()));
-                            ui->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.artists()));
-                            idx++;
-                        }
+                       fillListWidgetPlaylists(trackList);
                      }
             );
 }
@@ -88,9 +82,47 @@ void SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()
     QString playListName = QInputDialog::getText(this, tr("New Play List"),
                                            tr("Insert the Playlist name"), QLineEdit::Normal,
                                             tr(""), &ok);
-    localPlaylists_.push_back(LocalPlaylist(playListName));
-    ui->listWidgetPlaylists->addItem(playListName);
-    qDebug() << "[SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()][INFO] Empty playlist with name " << playListName << " created";
+    auto end = localPlaylists_.constEnd();
+    if(!localPlaylists_.contains(playListName))
+    {
+        localPlaylists_.insert(playListName,LocalPlaylist(playListName));
+        ui->listWidgetPlaylists->addItem(playListName);
+        qDebug() << "[SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()][INFO] Created empty playlist with name " << playListName;
+    }
+    else{
+        qDebug() << "[SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()][INFO] Playlist already exist " << playListName << " created";
+    }
+}
 
+
+
+void SpotifyPlayListPlayer::on_listWidgetPlaylists_itemClicked(QListWidgetItem *item)
+{
+    int item_idx = ui->listWidgetPlaylists->currentRow();
+    QString playListName = item->text();
+    if(localPlaylists_.contains(playListName))
+    {
+        auto it = localPlaylists_.find(playListName);
+
+        qDebug() <<"[SpotifyPlayListPlayer::on_listWidgetPlaylists_itemClicked()][INFO] Retriving Playlis with name " << it->name();
+        auto trackList = it->tracks();
+        fillListWidgetPlaylists(trackList);
+
+    }
+}
+void SpotifyPlayListPlayer::fillListWidgetPlaylists(const QList<SpotifyTrack> & trackList)
+{
+    // before fill, clear the data
+    ui->tableWidgetTracks->setRowCount(0);
+    ui->tableWidgetTracks->setRowCount(trackList.size());
+
+    int idx = 0;
+    foreach(const auto & track,trackList)
+    {
+        ui->tableWidgetTracks->setItem(idx,0,new QTableWidgetItem(track.url()));
+        ui->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.name()));
+        ui->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.artists()));
+        idx++;
+    }
 }
 
