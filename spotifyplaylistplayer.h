@@ -27,6 +27,8 @@ private slots:
 
     void on_tableWidgetTracks_cellClicked(int row, int column);
 
+    void on_pushButtonNewPlaylist_clicked();
+
 private:
     SpotifyWrapper spotifyWrapper;
     Ui::SpotifyPlayListPlayer *ui;

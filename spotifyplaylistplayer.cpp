@@ -2,6 +2,7 @@
 #include "./ui_spotifyplaylistplayer.h"
 #include "DataAccessObjects/dataaccessobject.h"
 #include <QAudioOutput>
+#include <QInputDialog>
 SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     : QWidget(parent), spotifyWrapper(this)
     , ui(new Ui::SpotifyPlayListPlayer)
@@ -24,9 +25,9 @@ void SpotifyPlayListPlayer::on_pushButtonGrant_clicked()
 
     QObject::connect(&spotifyWrapper, &SpotifyWrapper::userReplied, [this](SpotifyUser user){
            ui->lineEditTrack->setEnabled(true);
-           ui->labelUserId->setText("<b>User ID: </b>" + user.id_ + "\n"
-                                    + "<b>E-mail: </b>"+user.email_ +"</b>" + "\n"
-                                    + "<b>Name: </b>" + user.name_);
+           ui->labelUserId->setText("<b>User ID: </b>" + user.id() + "\n"
+                                    + "<b>E-mail: </b>"+user.email() +"</b>" + "\n"
+                                    + "<b>Name: </b>" + user.name());
     });
 
 }
@@ -42,11 +43,11 @@ void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
                         uint8_t idx = 0;
                         foreach(const auto & track,tracksList)
                         {
-                            ui->tableWidgetTracks->setItem(idx,0,new QTableWidgetItem(track.url_));
-                            ui->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.name_));
-                            ui->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.artists_));
+                            ui->tableWidgetTracks->setItem(idx,0,new QTableWidgetItem(track.url()));
+                            ui->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.name()));
+                            ui->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.artists()));
                             idx++;
-                            qDebug()<< track.url_ <<" " <<track.id_ << " " <<track.name_ <<" " << track.artists_;
+                            qDebug()<< track.url() <<" " <<track.id() << " " <<track.name() <<" " << track.artists();
                         }
                      }
             );
@@ -70,6 +71,18 @@ void SpotifyPlayListPlayer::on_pushButton_clicked()
 
 void SpotifyPlayListPlayer::on_tableWidgetTracks_cellClicked(int row, int column)
 {
+
+}
+
+
+void SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()
+{
+    // once clicked to create a new playlist, get the playlist name from user input
+    bool ok;
+
+    QString text = QInputDialog::getText(this, tr("New Play List"),
+                                           tr("Insert the Playlist name"), QLineEdit::Normal,
+                                            tr(""), &ok);
 
 }
 

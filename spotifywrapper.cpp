@@ -108,12 +108,10 @@ void SpotifyWrapper::requestUser()
 
                         const auto data = reply->readAll();
                         const auto document = QJsonDocument::fromJson(data);
-                        const auto root = document.object();
+                        const auto userJson = document.object();
 
-
-                        qDebug() << root <<"\n";
-                        SpotifyUser user(root.value("display_name").toString(),root.value("email").toString(), root.value("id").toString()) ;
-
+                        //SpotifyUser user(userJson.value("display_name").toString(),userJson.value("email").toString(), userJson.value("id").toString()) ;
+                        SpotifyUser user(userJson);
                         // after receive the user id emit a signal to notify the application
                         emit userReplied(user);
                     }
@@ -155,18 +153,9 @@ void SpotifyWrapper::requestSearchTrack(QString  phrase, uint8_t limit)
                         foreach (const QJsonValue & item, jsonItemsArray) {
                             QString music;
                             const auto track = item.toObject();
-                            // create our DAO to communicate with the UI
-                            SpotifyTrack spotifyTrack;
-                            spotifyTrack.id_ = track.value("id").toString();
-                            spotifyTrack.name_ = track.value("name").toString();
-                            spotifyTrack.url_ = track.value("preview_url").toString();
-                            const auto jsonArrayArtists = track.value("artists").toArray();
-
-                            foreach (const QJsonValue & value, jsonArrayArtists){
-                                const auto artists = value.toObject();
-                                spotifyTrack.artists_ += artists.value("name").toString() + " ";
-                            }
-
+                            // create our DAO Spotify Track to communicate with the UI
+                            SpotifyTrack spotifyTrack(track);
+                            // add our track to list
                             tracksList.push_back(spotifyTrack);
 
                         }
