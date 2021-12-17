@@ -41,6 +41,15 @@ public:
     {
         setupLocalPlaylist(name,trackList);
     }
+    QString name()
+    {
+        return map_["name"].toString();
+    }
+    QList<SpotifyTrack> tracks()
+    {
+        QList<SpotifyTrack> tracks;
+        return tracks;
+    }
 };
 
 #endif // LOCALPLAYLIST_H
