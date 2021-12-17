@@ -48,7 +48,20 @@ public:
     QList<SpotifyTrack> tracks()
     {
         QList<SpotifyTrack> tracks;
+        const auto jsonTrackList = map_["tracks"].toJsonArray();
+        foreach(const auto & jsonTrack,jsonTrackList)
+        {
+            tracks.push_back(SpotifyTrack(jsonTrack.toObject()));
+        }
         return tracks;
+    }
+    void append(SpotifyTrack & track)
+    {
+        QList<SpotifyTrack> tracks_copy;
+        tracks_copy = tracks();
+        tracks_copy.push_back(track);
+        QString listName = name();
+        setupLocalPlaylist(listName,tracks_copy);
     }
 };
 
