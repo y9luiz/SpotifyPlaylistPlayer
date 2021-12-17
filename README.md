@@ -4,18 +4,20 @@ This project is compatible with Windows and Linux.
 
 ### Test enviroment
 
-### Linux
+#### Linux
 
-  OS: Ubuntu 18.04 and Ubuntu 20.04
-  Compiler: gcc 9.3
-  Qt Version: 5.12
+  * OS: Ubuntu 18.04 and Ubuntu 20.04
+  * Compiler: gcc 9.3
+  * Qt Version: 5.12
   
-### Windows
+#### Windows
 
-  OS Version: Windows 10 x64
-  Compiler: MS BUILD 2017
-  Qt Version: 6.3
-  
+  * OS Version: Windows 10 x64
+  * Compiler: MS BUILD 2017
+  * Qt Version: 6.3
+
+# How build
+
 ## Linux 
 ### Dependencies:
 All these dependencies could be installed by apt get if you are using 
