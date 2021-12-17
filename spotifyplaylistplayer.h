@@ -48,16 +48,16 @@ private slots:
     void on_pushButtonPlayMusic_clicked();
 
 private:
-    SpotifyWrapper spotifyWrapper;
-    Ui::SpotifyPlayListPlayer *ui;
+    SpotifyWrapper spotifyWrapper_;
+    Ui::SpotifyPlayListPlayer *ui_;
     std::unique_ptr<QMediaPlayer> player_;
 #if IS_QT6
     std::unique_ptr<QAudioOutput> audioOutput_;
 #endif
     QMap<QString,LocalPlaylist> localPlaylists_;
     // store a reference to current selected playlist
-    LocalPlaylist * currentLocalPlaylist = nullptr;
+    LocalPlaylist * currentLocalPlaylist_ = nullptr;
     // store a reference to current selected track
-    SpotifyTrack * currentTrack = nullptr;
+    std::shared_ptr<SpotifyTrack>  currentTrack_ = nullptr;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H
