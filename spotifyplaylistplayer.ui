@@ -55,7 +55,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButtonPlayMusic">
          <property name="text">
           <string>Play Music</string>
          </property>
@@ -160,6 +160,11 @@
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
        </attribute>
+       <column>
+        <property name="text">
+         <string>ID</string>
+        </property>
+       </column>
        <column>
         <property name="text">
          <string>Preview Url</string>
