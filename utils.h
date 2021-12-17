@@ -16,6 +16,10 @@ namespace Constants
         const QString redirectUri = "http://localhost:" + QString::number(port) + "/cb/";
         const QString grantType = "authorization_code";
     }
+    namespace SpotifyPlaylistPlayer
+    {
+        const uint8_t PlaylistSize = 10;
+    }
 };
 
 #endif // UTILS_H
