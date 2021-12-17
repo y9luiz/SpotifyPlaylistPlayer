@@ -7,12 +7,13 @@
 #include <QMap>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QTableWidgetItem>
 #include "spotifywrapper.h"
 
 #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-#define IS_QT6 1
+    #define IS_QT6 1
 #else
-#define IS_QT6 0
+    #define IS_QT6 0
 #endif
 
 
@@ -34,21 +35,29 @@ private slots:
 
     void on_lineEditTrack_returnPressed();
 
-    void on_pushButton_clicked();
-
     void on_pushButtonNewPlaylist_clicked();
 
     void on_listWidgetPlaylists_itemClicked(QListWidgetItem *item);
 
     void fillListWidgetPlaylists(const QList<SpotifyTrack> & tracks);
 
+    void on_pushButtonAddToPlaylist_clicked();
+
+    void on_tableWidgetTracks_itemClicked(QTableWidgetItem *item);
+
+    void on_pushButtonPlayMusic_clicked();
+
 private:
     SpotifyWrapper spotifyWrapper;
     Ui::SpotifyPlayListPlayer *ui;
-    std::shared_ptr<QMediaPlayer> player_;
+    std::unique_ptr<QMediaPlayer> player_;
 #if IS_QT6
-    std::shared_ptr<QAudioOutput> audioOutput_;
+    std::unique_ptr<QAudioOutput> audioOutput_;
 #endif
     QMap<QString,LocalPlaylist> localPlaylists_;
+    // store a reference to current selected playlist
+    LocalPlaylist * currentLocalPlaylist = nullptr;
+    // store a reference to current selected track
+    SpotifyTrack * currentTrack = nullptr;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H
