@@ -3,6 +3,7 @@
 #include "DataAccessObjects/dataaccessobject.h"
 #include <QAudioOutput>
 #include <QInputDialog>
+#include <memory>
 #include "utils.h"
 SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     : QWidget(parent), spotifyWrapper(this)
@@ -61,10 +62,13 @@ void SpotifyPlayListPlayer::on_pushButtonPlayMusic_clicked()
         // which correspond to the track preview url
         QString trackPreviewUrl = items.front()->text();
         qDebug() << "[SpotifyPlayListPlayer::on_pushButton_clicked()][INFO] starting playing music";
-        player_->setSource(QUrl(trackPreviewUrl));
         #if IS_QT6
+            qDebug() << "wish";
+            player_->setSource(QUrl(trackPreviewUrl));
             audioOutput_->setVolume(Constants::SpotifyPlaylistPlayer::volume);
         #else
+            qDebug() << trackPreviewUrl;
+            player_->setMedia(QUrl(trackPreviewUrl));
             player_->setVolume(Constants::SpotifyPlaylistPlayer::volume);
         #endif
         player_->play();
@@ -136,5 +140,3 @@ void SpotifyPlayListPlayer::on_tableWidgetTracks_itemClicked(QTableWidgetItem *i
 {
 
 }
-
-
