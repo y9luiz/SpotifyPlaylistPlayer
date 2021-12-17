@@ -13,7 +13,10 @@ SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     #endif
     ui->setupUi(this);
     ui->lineEditTrack->setEnabled(false);
+    //
     ui->tableWidgetTracks->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // put the list on horizontal
+    ui->listWidgetPlaylists->setFlow(QListView::LeftToRight);
 }
 
 SpotifyPlayListPlayer::~SpotifyPlayListPlayer()
@@ -86,6 +89,7 @@ void SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()
                                            tr("Insert the Playlist name"), QLineEdit::Normal,
                                             tr(""), &ok);
     localPlaylists_.push_back(LocalPlaylist(playListName));
+    ui->listWidgetPlaylists->addItem(playListName);
     qDebug() << "[SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()][INFO] Empty playlist with name " << playListName << " created";
 
 }
