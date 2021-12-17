@@ -4,7 +4,9 @@
 #include <QWidget>
 #include <memory>
 #include <QMediaPlayer>
-#include <QList>
+#include <QMap>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include "spotifywrapper.h"
 
 #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
@@ -36,6 +38,10 @@ private slots:
 
     void on_pushButtonNewPlaylist_clicked();
 
+    void on_listWidgetPlaylists_itemClicked(QListWidgetItem *item);
+
+    void fillListWidgetPlaylists(const QList<SpotifyTrack> & tracks);
+
 private:
     SpotifyWrapper spotifyWrapper;
     Ui::SpotifyPlayListPlayer *ui;
@@ -43,6 +49,6 @@ private:
 #if IS_QT6
     std::shared_ptr<QAudioOutput> audioOutput_;
 #endif
-    QList<LocalPlaylist> localPlaylists_;
+    QMap<QString,LocalPlaylist> localPlaylists_;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H
