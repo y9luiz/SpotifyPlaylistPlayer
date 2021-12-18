@@ -95,9 +95,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButtonLoadPlaylist">
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
-          <string>Load Playlist</string>
+          <string>Save Playlist</string>
          </property>
         </widget>
        </item>
