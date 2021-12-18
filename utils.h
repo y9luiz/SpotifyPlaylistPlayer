@@ -1,7 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include <QString>
-
+#include <QJsonDocument>
+#include <QFile>
+#include <QDir>
 #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
     #define IS_QT6 1
 #else
@@ -29,5 +31,17 @@ namespace Constants
         const uint8_t volume = 50;
     }
 };
+
+inline QJsonDocument loadJsonFile(QString fileName) {
+    QFile jsonFile(fileName);
+    jsonFile.open(QFile::ReadOnly);
+    return QJsonDocument().fromJson(jsonFile.readAll());
+}
+
+inline void saveJsonFile(QJsonDocument document, QString fileName) {
+    QFile jsonFile(fileName);
+    jsonFile.open(QFile::WriteOnly);
+    jsonFile.write(document.toJson());
+}
 
 #endif // UTILS_H
