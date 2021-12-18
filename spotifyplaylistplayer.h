@@ -10,7 +10,7 @@
 #include <QTableWidgetItem>
 #include "utils.h"
 #include "spotifywrapper.h"
-
+#include "LocalPlaylistFileManager/localplaylistfilemanager.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class SpotifyPlayListPlayer; }
 QT_END_NAMESPACE
@@ -40,6 +40,8 @@ private slots:
 
     void on_pushButtonPlayMusic_clicked();
 
+    void on_pushButtonSavePlaylist_clicked();
+
 private:
     SpotifyWrapper spotifyWrapper_;
     Ui::SpotifyPlayListPlayer *ui_;
@@ -53,5 +55,6 @@ private:
     LocalPlaylist * currentLocalPlaylist_ = nullptr;
     // store a reference to current selected track
     SpotifyTrack * currentTrack_ = nullptr;
+    LocalPlaylistFileManager localPlaylistFileManager_;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H

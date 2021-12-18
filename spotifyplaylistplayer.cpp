@@ -8,6 +8,7 @@
 SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     : QWidget(parent), spotifyWrapper_(this)
     , ui_(new Ui::SpotifyPlayListPlayer)
+    , localPlaylistFileManager_(Constants::SpotifyPlaylistPlayer::localPlayListDirectoryName)
 {
     player_ = std::make_unique<QMediaPlayer>(this);
     #if IS_QT6
@@ -19,6 +20,13 @@ SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     ui_->tableWidgetTracks->setSelectionBehavior(QAbstractItemView::SelectRows);
     // put the list on horizontal
     ui_->listWidgetPlaylists->setFlow(QListView::LeftToRight);
+    foreach(auto & localPlaylist, localPlaylistFileManager_.loadLocalPlaylistsFromDisk())
+    {
+        localPlaylists_.insert(localPlaylist.name(),localPlaylist);
+        qDebug() << localPlaylist.name();
+        ui_->listWidgetPlaylists->addItem(localPlaylist.name());
+
+    }
 }
 
 SpotifyPlayListPlayer::~SpotifyPlayListPlayer()
@@ -98,8 +106,6 @@ void SpotifyPlayListPlayer::on_pushButtonNewPlaylist_clicked()
     }
 }
 
-
-
 void SpotifyPlayListPlayer::on_listWidgetPlaylists_itemClicked(QListWidgetItem *item)
 {
 
@@ -165,6 +171,7 @@ void SpotifyPlayListPlayer::on_tableWidgetTracks_itemClicked(QTableWidgetItem *i
 
 void SpotifyPlayListPlayer::on_pushButtonSavePlaylist_clicked()
 {
-
+    if(currentLocalPlaylist_ != nullptr)
+        localPlaylistFileManager_.saveLocalPlaylistToDisk(*currentLocalPlaylist_);
 }
 
