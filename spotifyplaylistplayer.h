@@ -55,9 +55,10 @@ private:
     std::unique_ptr<QAudioOutput> audioOutput_;
 #endif
     QMap<QString,LocalPlaylist> localPlaylists_;
+    QList<SpotifyTrack> currentTrackList_;
     // store a reference to current selected playlist
     LocalPlaylist * currentLocalPlaylist_ = nullptr;
     // store a reference to current selected track
-    std::shared_ptr<SpotifyTrack>  currentTrack_ = nullptr;
+    SpotifyTrack * currentTrack_ = nullptr;
 };
 #endif // SPOTIFYPLAYLISTPLAYER_H
