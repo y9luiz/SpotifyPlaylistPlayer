@@ -15,7 +15,10 @@ void LocalPlaylistFileManager::createDirectory() const
 }
 QJsonDocument LocalPlaylistFileManager::loadJsonFile(QString fileName) const {
     QFile jsonFile(fileName);
-    jsonFile.open(QFile::ReadOnly);
+    if(!jsonFile.open(QFile::ReadOnly))
+    {
+        qDebug() << "[INFO] could not open the file " << fileName;
+    }
     return QJsonDocument().fromJson(jsonFile.readAll());
 }
 
@@ -36,7 +39,7 @@ QList<LocalPlaylist> LocalPlaylistFileManager::loadLocalPlaylistsFromDisk() cons
     QList<LocalPlaylist> localPlaylists;
     foreach(const auto & jsonFilename, jsonFileNames)
     {
-        auto jsonDocument = loadJsonFile(jsonFilename);
+        auto jsonDocument = loadJsonFile( directoryName_ + "/" + jsonFilename);
         auto jsonLocalPlayList = jsonDocument.object();
         localPlaylists.push_back(LocalPlaylist(jsonLocalPlayList));
     }
@@ -44,5 +47,6 @@ QList<LocalPlaylist> LocalPlaylistFileManager::loadLocalPlaylistsFromDisk() cons
 }
 void LocalPlaylistFileManager::saveLocalPlaylistToDisk(const LocalPlaylist & localPlayList) const
 {
-    assert(("[LocalPlaylistFileManager::saveLocalPlaylistToDisk] not implemented yet",false));
+    QJsonDocument jsonDocument(localPlayList.toJsonObject());
+    saveJsonFile(jsonDocument, directoryName_ + "/" + localPlayList.name() + ".json");
 }
