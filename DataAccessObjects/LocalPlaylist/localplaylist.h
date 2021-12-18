@@ -12,7 +12,7 @@ private:
         QString name = jsonObject.value("name").toString();
 
         const auto jsonArrayTracks = jsonObject.value("tracks").toArray();
-
+        map_["name"] = name;
         map_["tracks"] = jsonArrayTracks;
     }
     void setupLocalPlaylist(QString & name, const QList<SpotifyTrack> & trackList)
