@@ -75,6 +75,12 @@ public:
         return false;
     }
     operator QString() const { return map_["name"].toString() + " " + map_["tracks"].toString(); }
+    LocalPlaylist operator = (const LocalPlaylist & other)
+    {
+        auto name = other.name();
+        auto trackList = other.tracks();
+        return LocalPlaylist(name, trackList);
+    }
 
 };
 
