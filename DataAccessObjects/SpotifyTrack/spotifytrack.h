@@ -1,6 +1,7 @@
 #ifndef SPOTIFYTRACK_H
 #define SPOTIFYTRACK_H
 #include <QString>
+#include <QJsonArray>
 #include "../abstractdaoobject.h"
 class SpotifyTrack : public AbstractDAOObject
 {
@@ -11,7 +12,7 @@ private:
         map_["name"] = name;
         map_["artists"] = artists;
         map_["id"] = id;
-        map_["url"] = url;
+        map_["preview_url"] = url;
     }
     virtual void fromJsonObject(const QJsonObject & jsonObject) override
     {
@@ -21,10 +22,17 @@ private:
         QString artists;
 
         const auto jsonArrayArtists = jsonObject.value("artists").toArray();
-
-        foreach (const QJsonValue & value, jsonArrayArtists){
-            const auto artist = value.toObject();
-            artists += artist.value("name").toString() + " ";
+        if(!jsonArrayArtists.isEmpty())
+        {
+            // for the case that jsonObject stores a artists array
+            foreach (const QJsonValue & value, jsonArrayArtists){
+                const auto artist = value.toObject();
+                artists += artist.value("name").toString() + " ";
+            }
+        }
+        else{
+            // for the case that jsonObject stores only a artists QString
+            artists = jsonObject.value("artists").toString();
         }
         setupSpotifyTrack(name,artists,id,preview_url);
     }
@@ -48,9 +56,10 @@ public:
         fromJsonObject(jsonObject);
     }
 
+    operator QString() const { return "Spotify Track { name: " + name() + " url: " + url() + " artists: " +  artists() + " id: " + id() + " }";  }
 
     inline QString  name() const {return map_["name"].toString();};
-    inline QString url() const {return map_["url"].toString();};
+    inline QString url() const {return map_["preview_url"].toString();};
     inline QString artists() const {return map_["artists"].toString();};
     inline QString  id() const {return map_["id"].toString();};
 
