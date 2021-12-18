@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
         DataAccessObjects/SpotifyTrack/spotifytrack.h
         DataAccessObjects/abstractdaoobject.h
         DataAccessObjects/LocalPlaylist/localplaylist.h
+        LocalPlaylistFileManager/localplaylistfilemanager.h
+        LocalPlaylistFileManager/localplaylistfilemanager.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
