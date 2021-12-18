@@ -67,7 +67,6 @@ void SpotifyPlayListPlayer::on_pushButtonPlayMusic_clicked()
         QString trackPreviewUrl = items.value(1)->text();
         qDebug() << "[SpotifyPlayListPlayer::on_pushButton_clicked()][INFO] starting playing music";
         #if IS_QT6
-            qDebug() << "wish";
             player_->setSource(QUrl(trackPreviewUrl));
             audioOutput_->setVolume(Constants::SpotifyPlaylistPlayer::volume);
         #else
