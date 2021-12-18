@@ -29,6 +29,7 @@ namespace Constants
     {
         const uint8_t playlistSize = 10;
         const uint8_t volume = 50;
+        const QString localPlayListDirectoryName = "LocalPlaylists";
     }
 };
 
