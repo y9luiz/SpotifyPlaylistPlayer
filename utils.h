@@ -31,6 +31,12 @@ namespace Constants
         const uint8_t volume = 50;
     }
 };
+inline void createDirectory(QString directoryName)
+{
+    QDir dir(directoryName);
+    if(!dir.exists(directoryName))
+         dir.mkdir(directoryName);
+}
 
 inline QJsonDocument loadJsonFile(QString fileName) {
     QFile jsonFile(fileName);
