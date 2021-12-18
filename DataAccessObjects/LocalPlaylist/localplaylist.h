@@ -18,12 +18,10 @@ private:
     void setupLocalPlaylist(QString & name, const QList<SpotifyTrack> & trackList)
     {
         QJsonArray jsonArrayTracks;
-
         for(auto & track:trackList)
         {
-            jsonArrayTracks.append(track.toJsonObject());
+            jsonArrayTracks.append(track.toJsonObject(););
         }
-
         map_["name"] = name;
         map_["tracks"] = jsonArrayTracks;
     }
@@ -50,7 +48,7 @@ public:
         QList<SpotifyTrack> tracks;
         const auto jsonTrackList = map_["tracks"].toJsonArray();
         foreach(const auto & jsonTrack,jsonTrackList)
-        {
+        {            
             tracks.push_back(SpotifyTrack(jsonTrack.toObject()));
         }
         return tracks;
@@ -63,6 +61,8 @@ public:
         QString listName = name();
         setupLocalPlaylist(listName,tracks_copy);
     }
+    operator QString() const { return map_["name"].toString() + " " + map_["tracks"].toString(); }
+
 };
 
 #endif // LOCALPLAYLIST_H
