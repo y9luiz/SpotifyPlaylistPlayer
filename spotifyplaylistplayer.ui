@@ -27,16 +27,6 @@
       </widget>
      </item>
      <item row="5" column="0" colspan="2">
-      <widget class="QLineEdit" name="lineEditTrack">
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="placeholderText">
-        <string>Search For An PlaceHolder</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="sizeConstraint">
         <enum>QLayout::SetMinimumSize</enum>
@@ -156,10 +146,20 @@
        </item>
       </layout>
      </item>
-     <item row="6" column="0" colspan="2">
+     <item row="8" column="0" colspan="2">
       <widget class="QPushButton" name="pushButtonGrant">
        <property name="text">
         <string>Get Authorization</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2">
+      <widget class="QLineEdit" name="lineEditTrack">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="placeholderText">
+        <string>Search For An PlaceHolder</string>
        </property>
       </widget>
      </item>
@@ -202,13 +202,20 @@
        </column>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QListWidget" name="listWidgetPlaylists">
        <property name="maximumSize">
         <size>
          <width>16777215</width>
          <height>80</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelMyPlaylists">
+       <property name="text">
+        <string>My Playlists</string>
        </property>
       </widget>
      </item>
