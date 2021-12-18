@@ -3,13 +3,15 @@
 LocalPlaylistFileManager::LocalPlaylistFileManager(QString directoryName,QObject *parent)
     : QObject{parent}, directoryName_(directoryName), dir_(directoryName_)
 {
+    qDebug () << QDir::currentPath();
     createDirectory();
     dir_.setFilter(QDir::Files | QDir::Readable | QDir::Writable);
 }
 void LocalPlaylistFileManager::createDirectory() const
 {
-    if(!dir_.exists(directoryName_))
-         dir_.mkdir(directoryName_);
+    if(!QDir().exists(directoryName_))
+         if(!QDir().mkdir(directoryName_));
+            qDebug() << "[LocalPlaylistFileManager::createDirectory()][INFO] could not create directory " << directoryName_;
 }
 QJsonDocument LocalPlaylistFileManager::loadJsonFile(QString fileName) const {
     QFile jsonFile(fileName);
