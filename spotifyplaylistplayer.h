@@ -42,6 +42,8 @@ private slots:
 
     void on_pushButtonSavePlaylist_clicked();
 
+    void on_pushButtonStopMusic_clicked();
+
 private:
     SpotifyWrapper spotifyWrapper_;
     Ui::SpotifyPlayListPlayer *ui_;

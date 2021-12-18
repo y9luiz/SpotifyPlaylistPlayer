@@ -175,3 +175,9 @@ void SpotifyPlayListPlayer::on_pushButtonSavePlaylist_clicked()
         localPlaylistFileManager_.saveLocalPlaylistToDisk(*currentLocalPlaylist_);
 }
 
+
+void SpotifyPlayListPlayer::on_pushButtonStopMusic_clicked()
+{
+    player_->stop();
+}
+
