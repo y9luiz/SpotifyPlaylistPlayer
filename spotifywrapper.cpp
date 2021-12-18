@@ -46,21 +46,41 @@ SpotifyWrapper::SpotifyWrapper(QObject *parent)
 
     // In this callback we configure the response as defined in the documentation
     // see https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+    //QAbstractOAuth::modifyParametersFunction()
+    //        std::function<void(Stage, QVariantMap*)> ModifyParametersFunction;
     oauth2->setModifyParametersFunction(
-            [&](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant> *parameters) {
-                qDebug() << "[SpotifyWrapper::SpotifyWrapper()][QAbstractOAuth::Stage] Status changed";
-                if(stage == QAbstractOAuth::Stage::RequestingAuthorization) {
-                    parameters->insert("duration", "permanent");
-                    parameters->insert("redirect_uri",Constants::SpotifyWrapper::redirectUri);
-                    parameters->insert("response_type",Constants::SpotifyWrapper::responseType);
+            #if IS_QT6
+                [&](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant> *parameters) {
+                    qDebug() << "[SpotifyWrapper::SpotifyWrapper()][QAbstractOAuth::Stage] Status changed";
+                    if(stage == QAbstractOAuth::Stage::RequestingAuthorization) {
+                        parameters->insert("duration", "permanent");
+                        parameters->insert("redirect_uri",Constants::SpotifyWrapper::redirectUri);
+                        parameters->insert("response_type",Constants::SpotifyWrapper::responseType);
+                    }
+                    if(stage == QAbstractOAuth::Stage::RequestingAccessToken){
+                        parameters->insert("redirect_uri",Constants::SpotifyWrapper::redirectUri);
+                        parameters->insert("state",state);
+                        parameters->insert("grant_type", Constants::SpotifyWrapper::grantType);
+                        parameters->insert("code",code);
+                    }
                 }
-                if(stage == QAbstractOAuth::Stage::RequestingAccessToken){
-                    parameters->insert("redirect_uri",Constants::SpotifyWrapper::redirectUri);
-                    parameters->insert("state",state);
-                    parameters->insert("grant_type", Constants::SpotifyWrapper::grantType);
-                    parameters->insert("code",code);
+            #else
+                [&](QAbstractOAuth::Stage stage, QVariantMap *parameters) {
+                    qDebug() << "[SpotifyWrapper::SpotifyWrapper()][QAbstractOAuth::Stage] Status changed";
+                    if(stage == QAbstractOAuth::Stage::RequestingAuthorization) {
+                        parameters->insert("duration", "permanent");
+                        parameters->insert("redirect_uri",Constants::SpotifyWrapper::redirectUri);
+                        parameters->insert("response_type",Constants::SpotifyWrapper::responseType);
+                    }
+                    if(stage == QAbstractOAuth::Stage::RequestingAccessToken){
+                        parameters->insert("redirect_uri",Constants::SpotifyWrapper::redirectUri);
+                        parameters->insert("state",state);
+                        parameters->insert("grant_type", Constants::SpotifyWrapper::grantType);
+                        parameters->insert("code",code);
+                    }
                 }
-            }
+            #endif
+
     );
 
     // open the web desktop browser to perform the authentication
