@@ -39,6 +39,9 @@ void SpotifyPlayListPlayer::on_pushButtonGrant_clicked()
 }
 void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
 {
+    currentTrack_ = nullptr;
+    currentTrackList_.clear();
+
     QString phrase = ui_->lineEditTrack->text();
     spotifyWrapper_.requestSearchTrack(phrase, Constants::SpotifyPlaylistPlayer::playlistSize );
     #if IS_QT6
@@ -46,7 +49,8 @@ void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
     #endif
     QObject::connect(&spotifyWrapper_, &SpotifyWrapper::trackReplied,
                      [this](QList<SpotifyTrack> trackList){
-                       fillListWidgetPlaylists(trackList);
+                        currentTrackList_ = trackList;
+                        fillListWidgetPlaylists(trackList);
                      }
             );
 }
@@ -101,7 +105,7 @@ void SpotifyPlayListPlayer::on_listWidgetPlaylists_itemClicked(QListWidgetItem *
     {
         auto it = localPlaylists_.find(playListName);
         currentLocalPlaylist_ = &(it.value());
-        qDebug() <<"[SpotifyPlayListPlayer::on_listWidgetPlaylists_itemClicked()][INFO] Retriving Playlis with name " << it->name();
+        qDebug() <<"[SpotifyPlayListPlayer::on_listWidgetPlaylists_itemClicked()][INFO] Retriving Playlist with name " << it->name();
         auto trackList = it->tracks();
         fillListWidgetPlaylists(trackList);
     }
@@ -115,6 +119,7 @@ void SpotifyPlayListPlayer::fillListWidgetPlaylists(const QList<SpotifyTrack> & 
     int idx = 0;
     foreach(const auto & track,trackList)
     {
+        qDebug() << "[SpotifyPlayListPlayer::fillListWidgetPlaylists][INFO] adding track "<< track << " to tableWidgetTracks";
         ui_->tableWidgetTracks->setItem(idx,0,new QTableWidgetItem(track.id()));
         ui_->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.url()));
         ui_->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.name()));
@@ -126,16 +131,26 @@ void SpotifyPlayListPlayer::fillListWidgetPlaylists(const QList<SpotifyTrack> & 
 
 void SpotifyPlayListPlayer::on_pushButtonAddToPlaylist_clicked()
 {
-    if(currentLocalPlaylist_ != nullptr)
+    if(currentLocalPlaylist_ != nullptr && currentTrack_ != nullptr)
     {
-
+        qDebug() << "[SpotifyPlayListPlayer::::on_pushButtonAddToPlaylist_clicked()][INFO] track added to playlist " << *currentTrack_;
+        currentLocalPlaylist_->append(*currentTrack_);
     }
 }
 
 
 void SpotifyPlayListPlayer::on_tableWidgetTracks_itemClicked(QTableWidgetItem *item)
 {
+    auto items = ui_->tableWidgetTracks->selectedItems();
+    QString id = items.front()->text();
 
+    for(auto & track:currentTrackList_)
+    {
+        if(track.id() == id)
+        {
+            currentTrack_ = &track;
+        }
+    }
 }
 
 
