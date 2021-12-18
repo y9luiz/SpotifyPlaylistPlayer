@@ -20,7 +20,7 @@ private:
         QJsonArray jsonArrayTracks;
         for(auto & track:trackList)
         {
-            jsonArrayTracks.append(track.toJsonObject(););
+            jsonArrayTracks.append(track.toJsonObject());
         }
         map_["name"] = name;
         map_["tracks"] = jsonArrayTracks;
