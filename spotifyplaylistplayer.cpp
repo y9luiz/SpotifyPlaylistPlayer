@@ -13,6 +13,7 @@ SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     player_ = std::make_unique<QMediaPlayer>(this);
     #if IS_QT6
         audioOutput_ = std::make_unique<QAudioOutput>();
+        player_->setAudioOutput(audioOutput_.get());
     #endif
     ui_->setupUi(this);
     ui_->lineEditTrack->setEnabled(false);
@@ -53,9 +54,6 @@ void SpotifyPlayListPlayer::on_lineEditTrack_returnPressed()
 
     QString phrase = ui_->lineEditTrack->text();
     spotifyWrapper_.requestSearchTrack(phrase, Constants::SpotifyPlaylistPlayer::playlistSize );
-    #if IS_QT6
-        player_->setAudioOutput(audioOutput_.get());
-    #endif
     QObject::connect(&spotifyWrapper_, &SpotifyWrapper::trackReplied,
                      [this](QList<SpotifyTrack> trackList){
                         currentTrackList_ = trackList;
