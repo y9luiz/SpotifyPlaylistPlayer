@@ -57,7 +57,9 @@ public:
     }
 
     operator QString() const { return "Spotify Track { name: " + name() + " url: " + url() + " artists: " +  artists() + " id: " + id() + " }";  }
-
+    friend inline bool operator == (const SpotifyTrack & lhs, const SpotifyTrack & rhs ) {
+        return lhs.id() == rhs.id();
+    }
     inline QString  name() const {return map_["name"].toString();};
     inline QString url() const {return map_["preview_url"].toString();};
     inline QString artists() const {return map_["artists"].toString();};
