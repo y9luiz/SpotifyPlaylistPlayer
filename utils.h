@@ -2,6 +2,13 @@
 #define UTILS_H
 #include <QString>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    #define IS_QT6 1
+#else
+    #define IS_QT6 0
+#endif
+
+
 namespace Constants
 {
     namespace SpotifyWrapper
