@@ -31,23 +31,6 @@ namespace Constants
         const uint8_t volume = 50;
     }
 };
-inline void createDirectory(QString directoryName)
-{
-    QDir dir(directoryName);
-    if(!dir.exists(directoryName))
-         dir.mkdir(directoryName);
-}
 
-inline QJsonDocument loadJsonFile(QString fileName) {
-    QFile jsonFile(fileName);
-    jsonFile.open(QFile::ReadOnly);
-    return QJsonDocument().fromJson(jsonFile.readAll());
-}
-
-inline void saveJsonFile(QJsonDocument document, QString fileName) {
-    QFile jsonFile(fileName);
-    jsonFile.open(QFile::WriteOnly);
-    jsonFile.write(document.toJson());
-}
 
 #endif // UTILS_H
