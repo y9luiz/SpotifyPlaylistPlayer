@@ -30,7 +30,10 @@ private:
         setupLocalPlaylist(name,std::ref(trackList));
     }
 public:
-
+    LocalPlaylist(const QJsonObject & jsonObject)
+    {
+        fromJsonObject(jsonObject);
+    }
     LocalPlaylist(QString & name)
     {
         setupLocalPlaylist(name,{});
