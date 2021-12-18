@@ -138,7 +138,11 @@ void SpotifyPlayListPlayer::on_pushButtonAddToPlaylist_clicked()
     if(currentLocalPlaylist_ != nullptr && currentTrack_ != nullptr)
     {
         qDebug() << "[SpotifyPlayListPlayer::::on_pushButtonAddToPlaylist_clicked()][INFO] track added to playlist " << *currentTrack_;
-        currentLocalPlaylist_->append(*currentTrack_);
+        if(!currentLocalPlaylist_->contains(*currentTrack_))
+            currentLocalPlaylist_->append(*currentTrack_);
+    }
+    else{
+        qDebug() << "[SpotifyPlayListPlayer::::on_pushButtonAddToPlaylist_clicked()][INFO] track " << *currentTrack_ << " alredy exist in playlist";
     }
 }
 
