@@ -39,11 +39,11 @@ public:
     {
         setupLocalPlaylist(name,trackList);
     }
-    QString name()
+    QString name() const
     {
         return map_["name"].toString();
     }
-    QList<SpotifyTrack> tracks()
+    QList<SpotifyTrack> tracks() const
     {
         QList<SpotifyTrack> tracks;
         const auto jsonTrackList = map_["tracks"].toJsonArray();
@@ -60,6 +60,16 @@ public:
         tracks_copy.push_back(track);
         QString listName = name();
         setupLocalPlaylist(listName,tracks_copy);
+    }
+    bool contains( const SpotifyTrack & targetTrack) const
+    {
+        auto trackList = tracks();
+        foreach(const auto track,trackList)
+        {
+            if(track == targetTrack)
+                    return true;
+        }
+        return false;
     }
     operator QString() const { return map_["name"].toString() + " " + map_["tracks"].toString(); }
 
