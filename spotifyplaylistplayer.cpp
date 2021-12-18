@@ -61,9 +61,9 @@ void SpotifyPlayListPlayer::on_pushButtonPlayMusic_clicked()
 
     if(!items.empty())
     {
-        // get the first element of the ItemWidgetList
+        // get the second element of the ItemWidgetList
         // which correspond to the track preview url
-        QString trackPreviewUrl = items.front()->text();
+        QString trackPreviewUrl = items.value(1)->text();
         qDebug() << "[SpotifyPlayListPlayer::on_pushButton_clicked()][INFO] starting playing music";
         player_->setSource(QUrl(trackPreviewUrl));
         #if IS_QT6
@@ -116,15 +116,16 @@ void SpotifyPlayListPlayer::fillListWidgetPlaylists(const QList<SpotifyTrack> & 
     ui_->tableWidgetTracks->setRowCount(0);
     ui_->tableWidgetTracks->setRowCount(trackList.size());
 
-    int idx = 0;
+    int rowIdx = 0;
     foreach(const auto & track,trackList)
     {
+        int colIdx = 0;
         qDebug() << "[SpotifyPlayListPlayer::fillListWidgetPlaylists][INFO] adding track "<< track << " to tableWidgetTracks";
-        ui_->tableWidgetTracks->setItem(idx,0,new QTableWidgetItem(track.id()));
-        ui_->tableWidgetTracks->setItem(idx,1,new QTableWidgetItem(track.url()));
-        ui_->tableWidgetTracks->setItem(idx,2,new QTableWidgetItem(track.name()));
-        ui_->tableWidgetTracks->setItem(idx,3,new QTableWidgetItem(track.artists()));
-        idx++;
+        ui_->tableWidgetTracks->setItem(rowIdx,colIdx++,new QTableWidgetItem(track.id()));
+        ui_->tableWidgetTracks->setItem(rowIdx,colIdx++,new QTableWidgetItem(track.url()));
+        ui_->tableWidgetTracks->setItem(rowIdx,colIdx++,new QTableWidgetItem(track.name()));
+        ui_->tableWidgetTracks->setItem(rowIdx,colIdx,new QTableWidgetItem(track.artists()));
+        rowIdx++;
     }
 }
 
