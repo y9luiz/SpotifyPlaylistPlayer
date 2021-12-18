@@ -15,7 +15,7 @@ SpotifyPlayListPlayer::SpotifyPlayListPlayer(QWidget *parent)
     #endif
     ui_->setupUi(this);
     ui_->lineEditTrack->setEnabled(false);
-    //
+    // select a entire row instead of a single item
     ui_->tableWidgetTracks->setSelectionBehavior(QAbstractItemView::SelectRows);
     // put the list on horizontal
     ui_->listWidgetPlaylists->setFlow(QListView::LeftToRight);
@@ -160,3 +160,11 @@ void SpotifyPlayListPlayer::on_tableWidgetTracks_itemClicked(QTableWidgetItem *i
         }
     }
 }
+
+
+
+void SpotifyPlayListPlayer::on_pushButtonSavePlaylist_clicked()
+{
+
+}
+
